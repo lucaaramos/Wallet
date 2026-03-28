@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: wallet-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: wallet-rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672" # UI web
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  account-service:
+    build: ./services/accounts
+    container_name: accounts
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672/
+
+volumes:
+  mongo_data:
