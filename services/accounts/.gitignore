@@ -1,0 +1,76 @@
+# =========================
+# Go
+# =========================
+bin/
+build/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# Go modules cache (opcional)
+vendor/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+tmp/
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# MacOS
+# =========================
+.DS_Store
+
+# =========================
+# IDEs / Editors
+# =========================
+
+# VSCode
+.vscode/
+
+# JetBrains (GoLand, IntelliJ)
+.idea/
+
+# Vim
+*.swp
+*.swo
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Coverage / testing
+# =========================
+coverage.out
+coverage.html
+
+# =========================
+# Node (por si agregás frontend después)
+# =========================
+node_modules/
+
+# =========================
+# Misc
+# =========================
+*.tmp
+*.bak
+*.old
