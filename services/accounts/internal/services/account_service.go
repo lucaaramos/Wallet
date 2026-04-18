@@ -3,6 +3,8 @@ package services
 import (
 	"errors"
 	"wallet/services/accounts/internal/models"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type AccountRepository interface {
@@ -21,7 +23,7 @@ func NewAccountService(r AccountRepository) *AccountService {
 
 func (s *AccountService) CreateAccount(userID string) (*models.Account, error) {
 	account := models.Account{
-		ID:      userID, // simplificado
+		ID:      primitive.NewObjectID(),
 		UserID:  userID,
 		Balance: 0,
 	}
@@ -38,7 +40,7 @@ func (s *AccountService) GetAccount(id string) (*models.Account, error) {
 	return s.repo.FindByID(id)
 }
 
-func (s *AccountService) Deposit(id string, amount float64) error {
+func (s *AccountService) Deposit(id string, amount int64) error {
 	acc, err := s.repo.FindByID(id)
 	if err != nil {
 		return err
@@ -48,7 +50,7 @@ func (s *AccountService) Deposit(id string, amount float64) error {
 	return s.repo.Update(*acc)
 }
 
-func (s *AccountService) Withdraw(id string, amount float64) error {
+func (s *AccountService) Withdraw(id string, amount int64) error {
 	acc, err := s.repo.FindByID(id)
 	if err != nil {
 		return err
