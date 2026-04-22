@@ -2,8 +2,12 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+
+	"wallet/shared/rabbit"
 
 	"wallet/services/accounts/internal/mongo"
 	"wallet/services/accounts/internal/repository"
@@ -12,10 +16,28 @@ import (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("no .env file found")
+	}
+
 	app := fiber.New()
+
+	rabbitURL := os.Getenv("RABBITMQ_URL")
+	if rabbitURL == "" {
+		log.Fatal("RABBITMQ_URL is not set")
+	}
+
+	err = rabbit.Init(rabbitURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rabbit.Close()
+
+	// Mongo
 	db := mongo.NewMongoClient()
 	client := db.Database("accounts")
-	// wiring
+
 	repo := repository.NewAccountRepository(client)
 	service := services.NewAccountService(repo)
 	handler := accounts.NewHandler(service)
